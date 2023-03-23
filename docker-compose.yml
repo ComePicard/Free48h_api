@@ -6,7 +6,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: BDD_PASS
+      POSTGRES_USER: BDD_USER
     ports:
       - 5432:5432
