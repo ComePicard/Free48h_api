@@ -31,11 +31,11 @@ class CreateTicketModel(BaseModel):
 
 
 class EditTicketModel(CreateTicketModel):
-    ticket_id: int = Field(None, description="Identifiant du ticket")
+    id: int = Field(None, description="Identifiant du ticket")
 
 
 class TicketModel(CreateTicketModel):
-    ticket_id: int = Field(None, description="Identifiant du ticket")
+    id: int = Field(None, description="Identifiant du ticket")
     date_creation: datetime = Field(..., description="Date de création du ticket",
                                     example="2022-10-04T12:39:19.291694+00:00")
 

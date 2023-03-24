@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from api.config import ConfigFastapi
 from api.dao import get_pool
 from api.endpoints import router
+from api.endpoints.endpointsaccount import router as router_account
 from api.endpoints.endpointsticket import router as router_ticket
 
 
@@ -30,5 +31,6 @@ def make_app() -> FastAPI:
         cnx.closeall()
 
     _app.include_router(router_ticket)
+    _app.include_router(router_account)
     _app.include_router(router)
     return _app
