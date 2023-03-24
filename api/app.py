@@ -9,7 +9,7 @@ from api.endpoints.endpointsticket import router as router_ticket
 
 def make_app() -> FastAPI:
     _app = FastAPI(
-        title="MV-FLOW-LP-API",
+        title="Free 48h API",
         root_path=ConfigFastapi().openapi_prefix,
         swagger_ui_parameters={  # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
             "defaultModelsExpandDepth": 0,
