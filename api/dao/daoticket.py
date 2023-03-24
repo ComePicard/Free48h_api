@@ -99,8 +99,47 @@ def assign_support_to_ticket(support_id, ticket_id):
         sql = """
             UPDATE ticket(support_id = %(support_id)s)
             WHERE id = %(ticket_id)
+            RETURNING *
         """
         cur.execute(sql, {'ticket_id': ticket_id, "support_id": support_id})
+        result = cur.fetchone()
+    return result
+
+
+def change_status_of_ticket(ticket_id, status_id):
+    with get_cursor() as cur:
+        sql = """
+            UPDATE ticket(status_id = %(status_id)s)
+            WHERE id = %(ticket_id)
+            RETURNING *
+        """
+        cur.execute(sql, {"status_id": status_id, "ticket_id": ticket_id})
+        result = cur.fetchone()
+    return result
+
+
+def edit_content_of_ticket(ticket_id, content):
+    with get_cursor() as cur:
+        sql = """
+            UPDATE ticket(content = %(content)s)
+            WHERE id = %(ticket_id)
+            RETURNING *
+        """
+        cur.execute(sql, {"content": content, "ticket_id": ticket_id})
+        result = cur.fetchone()
+    return result
+
+
+def change_category_of_ticket(ticket_id, category_id):
+    with get_cursor() as cur:
+        sql = """
+            UPDATE ticket(category_id = %(category_id)s)
+            WHERE id = %(ticket_id)
+            RETURNING *
+        """
+        cur.execute(sql, {"category_id": category_id, "ticket_id": ticket_id})
+        result = cur.fetchone()
+    return result
 
 
 def delete_ticket(ticket_id: int):

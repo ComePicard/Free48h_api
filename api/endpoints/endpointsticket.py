@@ -5,7 +5,7 @@ from fastapi import Path, HTTPException, Depends, APIRouter
 from pydantic import BaseModel, constr, Field
 
 from api.dao.daoticket import get_ticket_by_id, add_ticket, edit_ticket, delete_ticket, get_ticket_by_email, \
-    assign_support_to_ticket, get_all_tickets
+    assign_support_to_ticket, get_all_tickets, change_category_of_ticket, edit_content_of_ticket
 
 router = APIRouter(tags=["Ticket"])
 
@@ -42,6 +42,18 @@ class TicketModel(CreateTicketModel):
 
 class SupportEditModel(BaseModel):
     support_id: int = Field(None, description="Identifiant du support")
+
+
+class ContentEditModel(BaseModel):
+    content: constr(strip_whitespace=True, min_length=1) = Field(..., description="Le message du client")
+
+
+class CategoryEditModel(BaseModel):
+    category_id: int = Field(None, description="Identifiant de la category", example=4)
+
+
+class StatusEditModel(BaseModel):
+    status_id: int = Field(None, description="Identifiant du status", example=4)
 
 
 @router.get('/tickets', response_model=list[TicketModel], summary="Affiche tous les tickets")
@@ -111,7 +123,7 @@ def put_ticket(
     )
 
 
-@router.patch('/ticket/{ticket_id]', response_model=TicketModel, summary="Édite le support affilié au ticket")
+@router.patch('/ticket/{ticket_id}', response_model=TicketModel, summary="Édite le support affilié au ticket")
 def patch_ticket_support(
         UpdateSupport: SupportEditModel,
         ticket=Depends(valid_ticket_from_path)
@@ -122,6 +134,32 @@ def patch_ticket_support(
     Edite le support affilié au ticket
     """
     return assign_support_to_ticket(support_id=UpdateSupport.support_id, ticket_id=ticket['id'])
+
+
+@router.patch('/ticket/{ticket_id}', response_model=TicketModel, summary="Édite la category affiliée au ticket")
+def patch_ticket_category(
+        UpdateCategory: CategoryEditModel,
+        ticket=Depends(valid_ticket_from_path)
+):
+    """
+    # Patch Ticket Support
+
+    Edite le support affilié au ticket
+    """
+    return change_category_of_ticket(category_id=UpdateCategory.category_id, ticket_id=ticket['id'])
+
+
+@router.patch('/ticket/{ticket_id}', response_model=TicketModel, summary="Édite la category affiliée au ticket")
+def patch_ticket_content(
+        UpdateContent: ContentEditModel,
+        ticket=Depends(valid_ticket_from_path)
+):
+    """
+    # Patch Ticket Support
+
+    Edite le support affilié au ticket
+    """
+    return edit_content_of_ticket(content=UpdateContent.category_id, ticket_id=ticket['id'])
 
 
 @router.delete('/ticket/{ticket_id}', summary="Supprime un ticket")
