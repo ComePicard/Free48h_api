@@ -13,6 +13,18 @@ def get_ticket_by_id(ticket_id: int):
     return result
 
 
+def get_ticket_by_email(email: str):
+    with get_cursor() as cur:
+        sql = """
+            SELECT *
+            FROM ticket
+            WHERE email = %(email)s
+        """
+        cur.execute(sql, {"email": email})
+        result = cur.fetchone()
+    return result
+
+
 def add_ticket(content: str, sender_id: int, support_id: int, category_id: int, status_id: int):
     with get_cursor() as cur:
         sql = """
@@ -69,6 +81,15 @@ def edit_ticket(ticket_id: int, content: str, sender_id: int, support_id: int, c
     return result
 
 
+def assign_support_to_ticket(support_id, ticket_id):
+    with get_cursor() as cur:
+        sql = """
+            UPDATE ticket(support_id = %(support_id)s)
+            WHERE id = %(ticket_id)
+        """
+        cur.execute(sql, {'ticket_id': ticket_id, "support_id": support_id})
+
+
 def delete_ticket(ticket_id: int):
     with get_cursor() as cur:
         sql = """
@@ -76,4 +97,3 @@ def delete_ticket(ticket_id: int):
             WHERE id = %(ticket_id)s
         """
         cur.execute(sql, {"ticket_id": ticket_id})
-
