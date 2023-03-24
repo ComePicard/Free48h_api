@@ -4,9 +4,8 @@ from typing import Any
 from fastapi import Path, HTTPException, APIRouter, Depends
 from pydantic import BaseModel, constr, Field
 
-from api.dao.daoaccount import get_account_by_id
 from api.dao.daomessage import get_all_message, get_message_by_ticket_id, add_message, edit_message, delete_message, \
-    get_message_by_account_email
+    get_message_by_account_email, get_message_by_id
 
 router = APIRouter(tags=["Message"])
 
@@ -14,7 +13,7 @@ router = APIRouter(tags=["Message"])
 def valid_message_from_path(
         message_id: int = Path(ge=1, description="L'identifiant du message", example=4)
 ) -> dict[str, Any]:
-    found_message = get_account_by_id(id=message_id)
+    found_message = get_message_by_id(id=message_id)
     if found_message is None:
         raise HTTPException(
             status_code=404,
@@ -104,8 +103,8 @@ def post_message(
 
 
 @router.put('/message/{message_id}', response_model=MessageModel, summary="Edite un compte")
-def put_account(
-        EditAccount: EditMessageModel,
+def put_message(
+        EditMessage: EditMessageModel,
         message=Depends(valid_message_from_path)
 ):
     """
@@ -115,9 +114,9 @@ def put_account(
     """
     return edit_message(
         id=message['id'],
-        content=EditAccount.content,
-        sender_id=EditAccount.sender_id,
-        ticket_id=EditAccount.ticket_id,
+        content=EditMessage.content,
+        sender_id=EditMessage.sender_id,
+        ticket_id=EditMessage.ticket_id,
     )
 
 
