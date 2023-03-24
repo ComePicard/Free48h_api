@@ -29,7 +29,9 @@ def get_ticket_by_email(email: str):
         sql = """
             SELECT *
             FROM ticket
-            WHERE email = %(email)s
+            INNER JOIN account
+            ON account.id = ticket.sender_id
+            WHERE account.email = %(email)s
         """
         cur.execute(sql, {"email": email})
         result = cur.fetchone()
