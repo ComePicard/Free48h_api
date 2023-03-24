@@ -5,7 +5,7 @@ from fastapi import Path, HTTPException, Depends, APIRouter
 from pydantic import BaseModel, constr, Field
 
 from api.dao.daoticket import get_ticket_by_id, add_ticket, edit_ticket, delete_ticket, get_ticket_by_email, \
-    assign_support_to_ticket
+    assign_support_to_ticket, get_all_tickets
 
 router = APIRouter(tags=["Ticket"])
 
@@ -42,6 +42,11 @@ class TicketModel(CreateTicketModel):
 
 class SupportEditModel(BaseModel):
     support_id: int = Field(None, description="Identifiant du support")
+
+
+@router.get('/tickets', response_model=list[TicketModel], summary="Affiche tous les tickets")
+def get_tickets():
+    return get_all_tickets()
 
 
 @router.get('/ticket/{ticket_id}', response_model=TicketModel, summary="Affiche un ticket")

@@ -1,6 +1,17 @@
 from api.dao import get_cursor
 
 
+def get_all_tickets():
+    with get_cursor() as cur:
+        sql = """
+            SELECT *
+            FROM ticket
+        """
+        cur.execute(sql)
+        result = cur.fetchall()
+    return result
+
+
 def get_ticket_by_id(ticket_id: int):
     with get_cursor() as cur:
         sql = """
